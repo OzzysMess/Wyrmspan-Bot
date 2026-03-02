@@ -1,0 +1,4 @@
+.venv/
+wyrm-data/
+__pycache__/
+tictactoe.ipynb
