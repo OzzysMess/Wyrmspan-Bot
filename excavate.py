@@ -1,31 +1,5 @@
 import numpy as np
-import json
-import subactions
-
-# Load CAVES.json
-with open('wyrm-data/CAVES.JSON', 'r') as f:
-    CAVES_LIST = json.load(f)
-
-# Convert to dictionary for easy lookup by ID
-CAVES = {cave['id']: cave for cave in CAVES_LIST}
-
-# Create ACTION_REGISTRY mapping action names to subactions functions
-ACTION_REGISTRY = {
-    'activate_OncePerRound_ability': subactions.activate_OncePerRound_ability,
-    'cache_any_resource_from_gen_supply': subactions.cache_any_resource_from_gen_supply,
-    'gain_any_resource': subactions.gain_any_resource,
-    'gain_cave_card': subactions.gain_cave_card,
-    'gain_coin': subactions.gain_coin,
-    'gain_crystal': subactions.gain_crystal,
-    'gain_dragon_card': subactions.gain_dragon_card,
-    'gain_dragon_guild': subactions.gain_dragon_guild,
-    'gain_gold': subactions.gain_gold,
-    'gain_meat': subactions.gain_meat,
-    'gain_milk': subactions.gain_milk,
-    'lay_egg': subactions.lay_egg,
-    'swap_dragon_locations': subactions.swap_dragon_locations,
-    'tuck_dragon_card_from_deck': subactions.tuck_dragon_card_from_deck,
-} 
+from init import CAVES, ACTION_REGISTRY 
 
 def egg_cost_for_excavation(column):
     '''Cost to excavate column 2, 3, 4 (column 1 is free at 0)''' 
