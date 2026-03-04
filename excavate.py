@@ -5,7 +5,8 @@ def egg_cost_for_excavation(column):
     return np.max([(column - 1),0])
 
 def can_excavate():
-    '''Check cave cards > 0, empty slots, enough eggs'''
+    '''Check cave cards > 0, empty slots, enough eggs,
+     if cave ID =52 check dragons,'''
     return True
 
 def Excavate(player_hand, player_mat, column):
@@ -20,14 +21,15 @@ def Excavate(player_hand, player_mat, column):
     #Choose cave card
     print("Availble cave cards in hand:")
     print(player_hand["cave_cards"])
-    cave_card = input("Enter the cave card ID you want to excavate with: ") 
+    cave_card_ID = input("Enter the cave card ID you want to excavate with: ") 
     
     #Choose where to excavate
     print("Where would like to excavate?)")
     row = input("Enter the cave to excavate row (1-3):")
     # column would be the first column that is not excavated in
     # the player_mat for a given row
-    column = np.where(player_mat['excavated'][int(row)-1] == 0)[0][0] + 2  # +2 to convert to game column index
+    # +2 to convert to game column index
+    column = np.where(player_mat['excavated'][int(row)-1] == 0)[0][0] + 2  
 
     slot = np.array([int(row), column])
 
@@ -43,9 +45,13 @@ def Excavate(player_hand, player_mat, column):
     player_mat['excavated'][slot[1]-2] = 1  # Mark as excavated
     print(f"Excavated {slot} for {egg_cost} eggs!")
 
-    do_cave_card_ability(cave_card)
+    do_cave_card_ability(cave_card_ID)
 
-def do_cave_card_ability(cave_card):
+def do_cave_card_ability(cave_card_ID):
     '''TODO Perform the ability of the excavated cave card'''
+    cave_card = CARDS[cave_card_ID]
+    for action in cave_card["actions"]:
+        action_handle = ACTION_REGISTRY[action]
+        action_handle()
     print("yea this needs to be implemented lol")
     return

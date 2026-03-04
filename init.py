@@ -34,12 +34,12 @@ def initialize_deck(dragon_ids=None, cave_ids=None):
     
     # Set defaults if not provided
     if dragon_ids is None:
-        dragon_ids = list(range(1, 181))  # 1-180
+        dragon_ids = list(range(1, 184))  # 1-183
     else:
         dragon_ids = list(dragon_ids)
     
     if cave_ids is None:
-        cave_ids = list(range(1, 81))  # 1-80
+        cave_ids = list(range(1, 76))  # 1-75
     else:
         cave_ids = list(cave_ids)
     
