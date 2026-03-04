@@ -17,8 +17,8 @@ def entice_discounted_dragon():
 def gain_any_resource():
     return
 
-def gain_benifit(benefits):
-    '''Choice of [benfits]'''
+def gain_cave_benifit(benefits):
+    '''Choice of Dragon Card, Cave Card, or Any Resource'''
     return
 
 def gain_cave_card():
