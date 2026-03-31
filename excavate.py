@@ -1,6 +1,8 @@
 import numpy as np
 from init import CAVES, ACTION_REGISTRY 
 
+# TODO
+# Final column excavation offer for a turn coin
 def egg_cost_for_excavation(column):
     '''Cost to excavate column 2, 3, 4 (column 1 is free at 0)''' 
     return np.max([(column - 1),0])
@@ -10,7 +12,7 @@ def can_excavate():
      if cave ID =52 check dragons,'''
     return True
 
-def Excavate(player_hand, player_mat, column):
+def Excavate(player_hand, player_mat):
     '''Perform excavation action
     - Player selects what cave card to excavate with
     - Player selects where on mat to excavate (row, col) 
@@ -33,6 +35,8 @@ def Excavate(player_hand, player_mat, column):
     column = np.where(player_mat['excavated'][int(row)-1] == 0)[0][0] + 2  
 
     slot = np.array([int(row), column])
+
+    #TODO
 
     if not can_excavate():
         print("Cannot excavate!")
