@@ -64,7 +64,7 @@ def do_cave_card_ability(cave_card_ID, player_hand, player_mat):
     for action_name in cave_card["actions"]:
         if action_name in ACTION_REGISTRY:
             action_handler = ACTION_REGISTRY[action_name]
-            action_handler(cave_card, player_hand, player_mat)
+            action_handler(player_hand, player_mat)
         else:
             print(f"Warning: Action '{action_name}' not found in ACTION_REGISTRY")
     
