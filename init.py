@@ -16,7 +16,7 @@ with open(data_dir / "CAVES.json", 'r') as f:
     CAVES_LIST = json.load(f)
 
 # Convert to dictionary for fast lookup by ID
-CAVES = {cave['id']: cave for cave in CAVES_LIST}
+CAVES = {int(cave['id']): cave for cave in CAVES_LIST}
 
 # Action registry mapping action names to subactions functions
 # This is used by excavate.py and other modules to execute cave card abilities
@@ -24,6 +24,7 @@ ACTION_REGISTRY = {
     'activate_OncePerRound_ability': subactions.activate_OncePerRound_ability,
     'cache_any_resource_from_gen_supply': subactions.cache_any_resource_from_gen_supply,
     'gain_any_resource': subactions.gain_any_resource,
+    'gain_benefit': subactions.gain_benefit,
     'gain_cave_card': subactions.gain_cave_card,
     'gain_coin': subactions.gain_coin,
     'gain_crystal': subactions.gain_crystal,
@@ -33,6 +34,7 @@ ACTION_REGISTRY = {
     'gain_meat': subactions.gain_meat,
     'gain_milk': subactions.gain_milk,
     'lay_egg': subactions.lay_egg,
+    'offer_3x': subactions.offer_3x,
     'swap_dragon_locations': subactions.swap_dragon_locations,
     'tuck_dragon_card_from_deck': subactions.tuck_dragon_card_from_deck,
 }
@@ -60,9 +62,9 @@ def initialize_deck(dragon_ids=None, cave_ids=None):
     Parameters:
     -----------
     dragon_ids : list or range, optional
-        List of dragon card IDs to load. Defaults to range(1, 181) for IDs 1-180.
+        List of dragon card IDs to load. Defaults to IDs 1-183.
     cave_ids : list or range, optional
-        List of cave card IDs to load. Defaults to range(1, 81) for IDs 1-80.
+        List of cave card IDs to load. Defaults to IDs 1-75.
     
     Returns:
     --------
@@ -231,8 +233,8 @@ def initialize_player_hand(
     player = {
         'name': name,
         'coins': 6,
-        'hand_caves': [hand_caves],
-        'hand_dragons': [hand_dragons],
+        'hand_caves': hand_caves,
+        'hand_dragons': hand_dragons,
         'eggs': 2,
         'resources': resources,
         'guild_position': 0

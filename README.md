@@ -11,3 +11,7 @@ My buddy Rios is too good at board games and doesn't let us win
 
 ## How?
 I'll be trying my luck at 2 different approaches: Monte Carlo Tree Search, and a Machine Learning approach, method TBD. 
+
+## What does this code not do?
+It does not consider:
+- Opponent actions

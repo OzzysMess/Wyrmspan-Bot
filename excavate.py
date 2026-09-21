@@ -87,7 +87,12 @@ def Excavate(player_hand, player_mat):
     do_cave_card_ability(cave_card_ID, player_hand, player_mat)
     # Remove the cave card from the player's hand
     player_hand["hand_caves"].remove(cave_card_ID)
-    
+
+    # Special action if last column in a row is dug out
+    if slot[1] == 4:
+        print(f"Last column in row {slot[0]} excavated! You may trade in 3 items for a coin.")
+        do_special_trade_in(player_hand, player_mat)
+
     return
 
 def do_cave_card_ability(cave_card_ID, player_hand, player_mat):
@@ -100,10 +105,29 @@ def do_cave_card_ability(cave_card_ID, player_hand, player_mat):
     
     # Execute each action in sequence
     for action_name in cave_card["actions"]:
-        if action_name in ACTION_REGISTRY:
-            action_handler = ACTION_REGISTRY[action_name]
-            action_handler(player_hand, player_mat)
-        else:
+        if action_name not in ACTION_REGISTRY:
             print(f"Warning: Action '{action_name}' not found in ACTION_REGISTRY")
-    
+            continue
+
+        action_handler = ACTION_REGISTRY[action_name]
+
+        if action_name == "gain_benefit":
+            action_handler(
+                player_hand,
+                player_mat,
+                cave_card.get("benefits", [])
+            )
+        elif action_name == "offer_3x":
+            action_handler(
+            player_hand,
+            player_mat,
+            cave_card.get("cost", []),
+            cave_card.get("buys", [])
+            )
+        else:
+            action_handler(player_hand, player_mat)
+    return
+
+def do_special_trade_in(player_hand, player_mat):
+    '''Trade in 3 items for a coin: resources or cards'''
     return
