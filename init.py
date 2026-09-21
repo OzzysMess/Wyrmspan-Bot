@@ -12,7 +12,7 @@ import subactions
 script_dir = Path(__file__).parent
 data_dir = script_dir / "wyrm-data"
 
-with open(data_dir / "CAVES.JSON", 'r') as f:
+with open(data_dir / "CAVES.json", 'r') as f:
     CAVES_LIST = json.load(f)
 
 # Convert to dictionary for fast lookup by ID
@@ -42,11 +42,13 @@ ACTION_REGISTRY = {
 def initialize_game():
     dragons, caves, dragon_deck_ids, cave_deck_ids = initialize_deck()
     showcase, dragon_deck_ids, cave_deck_ids = initialize_showcase(dragon_deck_ids, cave_deck_ids)
-    # Default is random choices, use second line for human input
-    #player1, dragon_deck_ids, cave_deck_ids = init.initialize_player("Obama", dragon_deck_ids, cave_deck_id_player_hand("Obama", dragon_deck_ids, cave_deck_ids, init.human_choose_dragon, init.human_choose_cave, init.human_choose_resources)s)
+    # Default is human choices, use second line for random
+    # player1_hand, dragon_deck_ids, cave_deck_ids = initialize_player_hand("Obama", dragon_deck_ids, cave_deck_ids, human_choose_dragon, human_choose_cave, human_choose_resources)
+    
     player1_hand, dragon_deck_ids, cave_deck_ids = initialize_player_hand(
-        "Obama", dragon_deck_ids, cave_deck_ids, human_choose_dragon,
-          human_choose_cave, _random_starting_resources)
+         "Obama", dragon_deck_ids, cave_deck_ids, None,
+           None, _random_starting_resources)
+    
     player1_mat = initialize_player_mat()
     guildtrack = initialize_guildtrack()
     return dragons, caves, showcase, guildtrack, player1_hand, player1_mat, dragon_deck_ids, cave_deck_ids
@@ -89,7 +91,7 @@ def initialize_deck(dragon_ids=None, cave_ids=None):
         dragons_data = json.load(f)
     
     # Load cave cards
-    caves_path = data_dir / "caves.json"
+    caves_path = data_dir / "CAVES.json"
     with open(caves_path, 'r') as f:
         caves_data = json.load(f)
     
