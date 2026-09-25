@@ -2,6 +2,7 @@ import json
 import pandas as pd
 from pathlib import Path
 import random
+from dataclasses import dataclass
 import subactions
 
 # ============================================================================
@@ -18,6 +19,18 @@ with open(data_dir / "CAVES.json", 'r') as f:
 # Convert to dictionary for fast lookup by ID
 CAVES = {int(cave['id']): cave for cave in CAVES_LIST}
 
+
+@dataclass
+class GameState:
+    """Shared state for one game board."""
+
+    dragons: pd.DataFrame
+    caves: pd.DataFrame
+    showcase: dict
+    guildtrack: list
+    dragon_deck_ids: list
+    cave_deck_ids: list
+
 # Action registry mapping action names to subactions functions
 # This is used by excavate.py and other modules to execute cave card abilities
 ACTION_REGISTRY = {
@@ -33,7 +46,10 @@ ACTION_REGISTRY = {
     'gain_gold': subactions.gain_gold,
     'gain_meat': subactions.gain_meat,
     'gain_milk': subactions.gain_milk,
+    'immediately_play_deck_cave_card': subactions.immediately_play_deck_cave_card,
+    'immediately_play_display_cave_card': subactions.immediately_play_display_cave_card,
     'lay_egg': subactions.lay_egg,
+    'offer_to_pay_and_play_cave_card': subactions.offer_to_pay_and_play_cave_card,
     'offer_3x': subactions.offer_3x,
     'swap_dragon_locations': subactions.swap_dragon_locations,
     'tuck_dragon_card_from_deck': subactions.tuck_dragon_card_from_deck,
@@ -42,18 +58,36 @@ ACTION_REGISTRY = {
 # ============================================================================
 
 def initialize_game():
-    dragons, caves, dragon_deck_ids, cave_deck_ids = initialize_deck()
-    showcase, dragon_deck_ids, cave_deck_ids = initialize_showcase(dragon_deck_ids, cave_deck_ids)
+    """Initialize one game and return shared state plus player one state."""
+    game_state = initialize_game_state()
     # Default is human choices, use second line for random
     # player1_hand, dragon_deck_ids, cave_deck_ids = initialize_player_hand("Obama", dragon_deck_ids, cave_deck_ids, human_choose_dragon, human_choose_cave, human_choose_resources)
     
     player1_hand, dragon_deck_ids, cave_deck_ids = initialize_player_hand(
-         "Obama", dragon_deck_ids, cave_deck_ids, None,
+         "Obama", game_state.dragon_deck_ids, game_state.cave_deck_ids, None,
            None, _random_starting_resources)
-    
+
+    game_state.dragon_deck_ids = dragon_deck_ids
+    game_state.cave_deck_ids = cave_deck_ids
     player1_mat = initialize_player_mat()
-    guildtrack = initialize_guildtrack()
-    return dragons, caves, showcase, guildtrack, player1_hand, player1_mat, dragon_deck_ids, cave_deck_ids
+    return game_state, player1_hand, player1_mat
+
+def initialize_game_state():
+    """Create the shared board state before players are initialized."""
+    dragons, caves, dragon_deck_ids, cave_deck_ids = initialize_deck()
+    showcase, dragon_deck_ids, cave_deck_ids = initialize_showcase(
+        dragon_deck_ids,
+        cave_deck_ids,
+    )
+
+    return GameState(
+        dragons=dragons,
+        caves=caves,
+        showcase=showcase,
+        guildtrack=initialize_guildtrack(),
+        dragon_deck_ids=dragon_deck_ids,
+        cave_deck_ids=cave_deck_ids,
+    )
 
 def initialize_deck(dragon_ids=None, cave_ids=None):
     """

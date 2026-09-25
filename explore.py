@@ -37,7 +37,7 @@ CAVE_BENEFITS = {
 # CAVE EXPLORATION LOGIC
 # ============================================================================
 
-def Explore(player_hand, player_mat, explore_row):
+def Explore(game_state, player_hand, player_mat, explore_row):
     """
     Handle cave exploration for a given row (cave).
     
@@ -56,18 +56,18 @@ def Explore(player_hand, player_mat, explore_row):
     """
     if explore_row == 1:
         """Explore the Crimson Cave (Row 1)"""
-        activate_cave_benefits(1, player_hand, player_mat)
+        activate_cave_benefits(game_state, 1, player_hand, player_mat)
     elif explore_row == 2:
         """Explore the Golden Grotto (Row 2)"""
-        activate_cave_benefits(2, player_hand, player_mat)
+        activate_cave_benefits(game_state, 2, player_hand, player_mat)
     elif explore_row == 3:
         """Explore the Crystal Cavern (Row 3)"""
-        activate_cave_benefits(3, player_hand, player_mat)
+        activate_cave_benefits(game_state, 3, player_hand, player_mat)
     else:
         print("Unexpected value for explore row")
     return
 
-def activate_cave_benefits(cave_id, player_hand, player_mat):
+def activate_cave_benefits(game_state, cave_id, player_hand, player_mat):
     """
     Activate the benefits of exploring a cave.
     
@@ -107,8 +107,7 @@ def activate_cave_benefits(cave_id, player_hand, player_mat):
         # Get the action function from the ACTION_REGISTRY
         if benefit_name in ACTION_REGISTRY:
             action_func = ACTION_REGISTRY[benefit_name]
-            # Call the action function with the player hand and player mat
-            action_func(player_hand, player_mat)
+            action_func(game_state, player_hand, player_mat)
         else:
             print(f"Warning: Benefit '{benefit_name}' not found in ACTION_REGISTRY")
     
