@@ -261,21 +261,22 @@ def gain_milk(game_state, player_hand, player_mat):
 
 def immediately_play_deck_cave_card(game_state, player_hand, player_mat):
     """Draw a cave from the deck and excavate it without normal costs."""
-    if not game_state.cave_deck_ids:
-        print("No cave cards remain in the deck.")
-        return None
 
     cave_card_id = random.choice(game_state.cave_deck_ids)
     game_state.cave_deck_ids.remove(cave_card_id)
 
     from excavate import Excavate
     Excavate(game_state, player_hand, player_mat, cave_card_id=cave_card_id)
-   
 
     return cave_card_id
 
 def immediately_play_display_cave_card(game_state, player_hand, player_mat):
     # TODO Implement logic to immediately play a cave card from the display
+    cave_card_id = human_choose_showcase_card(game_state, player_hand, card_type="caves")
+
+    from excavate import Excavate
+    Excavate(game_state, player_hand, player_mat, cave_card_id=cave_card_id)
+ 
     return
 
 def lay_egg(game_state, player_hand, player_mat):
